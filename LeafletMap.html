@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+    <title>Web Lightning Warning</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="./img/favicon.ico"/>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+
+</head>
+<body>
+    <div id="container">
+        <div id="sideMenu">
+            <button onclick="update()">Update</button>
+        </div>
+        <div id="mapid"></div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+            integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+            crossorigin=""></script>
+
+    <script type="text/javascript" src="js/styles.js"></script>
+    <script type="text/javascript" src="js/functions.js"></script>
+
+    <script>
+
+        var debug = 'y';
+
+        if (debug == 'y') {
+            var url = 'http://127.0.0.1:5000';
+        } else {
+            var url = 'https://weblightning.herokuapp.com';
+        }
+
+        var maptype = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+        var lightmode = 'https://api.mapbox.com/styles/v1/lucascantos/cjt7qafli103q1fmezu0xfful/tiles/256/{z}/{x}/{y}';
+        var darkmode = 'https://api.mapbox.com/styles/v1/lucascantos/cjtaq44zi0f3r1fofanndskhd/tiles/256/{z}/{x}/{y}';
+        var publicToken = '?access_token=pk.eyJ1IjoibHVjYXNjYW50b3MiLCJhIjoiY2pybDdnbzM0MDVsYzN5cGxxMXZhNmJpNSJ9.zeV5MaD9NvVOEqZAq4fjXg';
+
+        var lightmap = L.tileLayer(maptype + publicToken, backgroundMap);
+        var darkmap = L.tileLayer(darkmode + publicToken, backgroundMap);
+
+        var baseMapIndex = {
+            "Light": lightmap,
+            "Dark": darkmap,
+        }
+
+        var mymap = L.map('mapid', {
+            style: 'mapbox://styles/lucascantos/cjt7qafli103q1fmezu0xfful',
+            center: [-22.1, -48.43609],
+            zoom: 7,
+            layers: lightmap
+        });
+
+
+
+        var brasilShp = L.geoJSON(null, {style: backgroundStates});
+        var sampaShp = L.geoJSON(null, {style: backgroundPolys, onEachFeature: cityname});
+
+        var rainImg = L.imageOverlay(null);
+        var lighningsMrk = L.layerGroup();
+        var struckShp = L.geoJSON(null,  {style: highlightPolys, onEachFeature: cityname})
+
+        var fixas = {
+            "Brasil": brasilShp,
+            "São Paulo": sampaShp,
+
+        };
+        var dinamica = {
+            'Chuva': rainImg,
+            'Raios': lighningsMrk,
+            'Atingidos': struckShp,
+        };
+
+         var control = L.control.layers(baseMapIndex, dinamica).addTo(mymap);
+
+
+        //grabApi(url, '/brasil', brasilShp);
+        //grabApi(url, '/sp', sampaShp);
+        grabRain(url, '/chuva', rainImg);
+        grabApi(url, '/raios', lighningsMrk);
+        grabApi(url, '/sp/whatever', struckShp);
+
+        function update() {
+            grabRain(url, '/chuva', rainImg);
+            grabApi(url, '/sp/whatever', struckShp);
+            grabApi(url, '/raios', lighningsMrk);
+        }
+
+    </script>
+
+</body>
+</html>
