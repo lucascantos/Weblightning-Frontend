@@ -16,7 +16,7 @@
 
     };
     var myicon = L.icon({
-        iconUrl: './img/Licon.png',
+        iconUrl: 'img/Licon.png',
         iconSize: [15, 35],
 
     });
