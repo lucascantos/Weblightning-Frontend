@@ -31,6 +31,10 @@ function addMarker(data, layer) {
 function cityname(feature, layer) {
     layer.bindPopup(feature.properties.NM_ESTADO);
 }
+function ChangeRain() {
+    x = document.getElementById("customRange2").value
+    console.log(x);
+}
 
 function grabRain(url, minipath) {
     var request = new XMLHttpRequest();

@@ -6,90 +6,121 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="./img/favicon.ico"/>
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
           integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
           crossorigin=""/>
 
 </head>
 <body>
-    <div id="container">
-        <div id="sideMenu">
-            <button onclick="update()">Update</button>
-        </div>
+<div class="row ctn no-gutters">
+    <nav class="col-2 menu">
+        <ul class="nav m-3 flex-column">
+            <li class="nav-item">
+                <button onclick="update()" class="btn btn-secondary">Update</button>
+            </li>
+
+            <li class="nav-item">
+                <div class="row">
+                    <div class="col-4">
+                        <label for="customRange2" class="label" id="customLabel2">Radar</label>
+                    </div>
+                    <div class="col">
+                        <input id="customRange2" type="range" class="custom-range" min="1" max="5" value="0" onchange="ChangeRain()" ondrag="ChangeRain">
+                    </div>
+
+                </div>
+            </li>
+
+        </ul>
+    </nav>
+    <main class="col">
         <div id="mapid"></div>
-    </div>
-    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-            integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-            crossorigin=""></script>
-
-    <script type="text/javascript" src="js/styles.js"></script>
-    <script type="text/javascript" src="js/functions.js"></script>
-
-    <script>
-
-        var debug = 'y';
-
-        if (debug == 'y') {
-            var url = 'http://127.0.0.1:5000';
-        } else {
-            var url = 'https://weblightning.herokuapp.com';
-        }
-
-        var maptype = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
-        var lightmode = 'https://api.mapbox.com/styles/v1/lucascantos/cjt7qafli103q1fmezu0xfful/tiles/256/{z}/{x}/{y}';
-        var darkmode = 'https://api.mapbox.com/styles/v1/lucascantos/cjtaq44zi0f3r1fofanndskhd/tiles/256/{z}/{x}/{y}';
-        var publicToken = '?access_token=pk.eyJ1IjoibHVjYXNjYW50b3MiLCJhIjoiY2pybDdnbzM0MDVsYzN5cGxxMXZhNmJpNSJ9.zeV5MaD9NvVOEqZAq4fjXg';
-
-        var lightmap = L.tileLayer(maptype + publicToken, backgroundMap);
-        var darkmap = L.tileLayer(darkmode + publicToken, backgroundMap);
-
-        var baseMapIndex = {
-            "Light": lightmap,
-            "Dark": darkmap,
-        }
-
-        var mymap = L.map('mapid', {
-            style: 'mapbox://styles/lucascantos/cjt7qafli103q1fmezu0xfful',
-            center: [-22.1, -48.43609],
-            zoom: 7,
-            layers: lightmap
-        });
+    </main>
+</div>
 
 
+<script type="text/javascript" src="js/styles.js"></script>
+<script type="text/javascript" src="js/functions.js"></script>
+<script src="js/bootstrap.min.js"></script>
 
-        var brasilShp = L.geoJSON(null, {style: backgroundStates});
-        var sampaShp = L.geoJSON(null, {style: backgroundPolys, onEachFeature: cityname});
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
+<script>
+    radar_values = {0:'#333', 1:'#07A', 2:'#070', 3:'#AA0', 4:'#A00', 5:'#909'}
+    var slider_value = document.getElementById('customRange2')
+    var slider_label = document.getElementById('customLabel2')
+    slider_value.oninput = function () {
+        slider_value .style.background = radar_values[this.value];
+    }
 
-        var rainImg = L.imageOverlay(null);
-        var lighningsMrk = L.layerGroup();
-        var struckShp = L.geoJSON(null,  {style: highlightPolys, onEachFeature: cityname})
+</script>
 
-        var fixas = {
-            "Brasil": brasilShp,
-            "São Paulo": sampaShp,
+<script>
 
-        };
-        var dinamica = {
-            'Chuva': rainImg,
-            'Raios': lighningsMrk,
-            'Atingidos': struckShp,
-        };
+    var debug = 'n';
 
-         var control = L.control.layers(baseMapIndex, dinamica).addTo(mymap);
+    if (debug == 'y') {
+        var url = 'http://127.0.0.1:5000';
+    } else {
+        var url = 'https://weblightning.herokuapp.com';
+    }
+
+    var maptype = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+    var lightmode = 'https://api.mapbox.com/styles/v1/lucascantos/cjt7qafli103q1fmezu0xfful/tiles/256/{z}/{x}/{y}';
+    var darkmode = 'https://api.mapbox.com/styles/v1/lucascantos/cjtaq44zi0f3r1fofanndskhd/tiles/256/{z}/{x}/{y}';
+    var publicToken = '?access_token=pk.eyJ1IjoibHVjYXNjYW50b3MiLCJhIjoiY2pybDdnbzM0MDVsYzN5cGxxMXZhNmJpNSJ9.zeV5MaD9NvVOEqZAq4fjXg';
+
+    var lightmap = L.tileLayer(maptype + publicToken, backgroundMap);
+    var darkmap = L.tileLayer(darkmode + publicToken, backgroundMap);
+
+    var baseMapIndex = {
+        "Light": lightmap,
+        "Dark": darkmap,
+    }
+
+    var mymap = L.map('mapid', {
+        style: 'mapbox://styles/lucascantos/cjt7qafli103q1fmezu0xfful',
+        center: [-22.1, -48.43609],
+        zoom: 7,
+        layers: lightmap
+    });
 
 
-        //grabApi(url, '/brasil', brasilShp);
-        //grabApi(url, '/sp', sampaShp);
+    var brasilShp = L.geoJSON(null, {style: backgroundStates});
+    var sampaShp = L.geoJSON(null, {style: backgroundPolys, onEachFeature: cityname});
+
+    var rainImg = L.imageOverlay(null);
+    var lighningsMrk = L.layerGroup();
+    var struckShp = L.geoJSON(null, {style: highlightPolys, onEachFeature: cityname})
+
+    var fixas = {
+        "Brasil": brasilShp,
+        "São Paulo": sampaShp,
+
+    };
+    var dinamica = {
+        'Chuva': rainImg,
+        'Raios': lighningsMrk,
+        'Atingidos': struckShp,
+    };
+
+    var control = L.control.layers(baseMapIndex, dinamica).addTo(mymap);
+
+
+    //grabApi(url, '/brasil', brasilShp);
+    //grabApi(url, '/sp', sampaShp);
+    grabRain(url, '/chuva', rainImg);
+    grabApi(url, '/raios', lighningsMrk);
+    grabApi(url, '/sp/whatever', struckShp);
+
+    function update() {
         grabRain(url, '/chuva', rainImg);
-        grabApi(url, '/raios', lighningsMrk);
         grabApi(url, '/sp/whatever', struckShp);
-
-        function update() {
-            grabRain(url, '/chuva', rainImg);
-            grabApi(url, '/sp/whatever', struckShp);
-            grabApi(url, '/raios', lighningsMrk);
-        }
-    </script>
+        grabApi(url, '/raios', lighningsMrk);
+    }
+</script>
 
 </body>
 </html>
