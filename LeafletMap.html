@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
           integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
           crossorigin=""/>
+    <link rel="stylesheet" href="js/leaflet/leaflet.css"/>
 
 </head>
 <body>
@@ -26,7 +27,7 @@
                         <label for="customRange2" class="label" id="customLabel2">Radar</label>
                     </div>
                     <div class="col">
-                        <input id="customRange2" type="range" class="custom-range" min="1" max="5" value="0" onchange="ChangeRain()" ondrag="ChangeRain">
+                        <input id="customRange2" type="range" class="custom-range" min="1" max="5" value="1" onchange="ChangeRain()">
                     </div>
 
                 </div>
@@ -39,27 +40,26 @@
     </main>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-        crossorigin=""></script>
+<script src="js/leaflet/leaflet.js"></script>
 <script type="text/javascript" src="js/styles.js"></script>
 <script type="text/javascript" src="js/functions.js"></script>
 <script src="js/bootstrap.min.js"></script>
 
 
 <script>
-    radar_values = {0:'#333', 1:'#07A', 2:'#070', 3:'#AA0', 4:'#A00', 5:'#909'}
+    var radar_values = {0:'#333', 1:'#07A', 2:'#070', 3:'#AA0', 4:'#A00', 5:'#909'}
     var slider_value = document.getElementById('customRange2')
     var slider_label = document.getElementById('customLabel2')
     slider_value.oninput = function () {
         slider_value .style.background = radar_values[this.value];
+        console.log(this.value);
     }
 
 </script>
 
 <script>
 
-    var debug = 'n';
+    var debug = 'y';
 
     if (debug == 'y') {
         var url = 'http://127.0.0.1:5000';
@@ -82,8 +82,9 @@
 
     var mymap = L.map('mapid', {
         style: 'mapbox://styles/lucascantos/cjt7qafli103q1fmezu0xfful',
-        center: [-22.1, -48.43609],
+        center: [-22.1, -48.4],
         zoom: 7,
+        minZoom: 2,
         layers: lightmap
     });
 
@@ -108,15 +109,14 @@
 
     var control = L.control.layers(baseMapIndex, dinamica).addTo(mymap);
 
-
     //grabApi(url, '/brasil', brasilShp);
     //grabApi(url, '/sp', sampaShp);
-    grabRain(url, '/chuva', rainImg);
+    ChangeRain();
     grabApi(url, '/raios', lighningsMrk);
     grabApi(url, '/sp/whatever', struckShp);
 
     function update() {
-        grabRain(url, '/chuva', rainImg);
+        ChangeRain()
         grabApi(url, '/sp/whatever', struckShp);
         grabApi(url, '/raios', lighningsMrk);
     }

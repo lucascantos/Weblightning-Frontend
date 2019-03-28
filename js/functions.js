@@ -31,15 +31,18 @@ function addMarker(data, layer) {
 function cityname(feature, layer) {
     layer.bindPopup(feature.properties.NM_ESTADO);
 }
+
+
 function ChangeRain() {
-    x = document.getElementById("customRange2").value
-    console.log(x);
+    nivel = document.getElementById("customRange2").value
+    grabRain(url, '/chuva', rainImg, nivel);
+    console.log(nivel);
 }
 
-function grabRain(url, minipath) {
+function grabRain(url, minipath, nivel=1) {
     var request = new XMLHttpRequest();
     request.open('GET', url + minipath);
-    request.send();
+    request.send('nivel='+nivel);
     request.onload = function () {
         var data = JSON.parse(this.response);
         if (request.status >= 200 && request.status < 400) {
