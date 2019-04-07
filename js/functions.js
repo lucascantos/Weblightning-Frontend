@@ -36,7 +36,7 @@ function cityname(feature, layer) {
 function ChangeRain() {
     nivel = document.getElementById("customRange2").value
     grabRain(url, '/chuva', rainImg, nivel);
-    console.log(nivel);
+    console.log({grabRain})
 }
 
 function grabRain(url, minipath, nivel=1) {
