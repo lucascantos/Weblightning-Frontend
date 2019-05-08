@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./img/favicon.ico"/>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <link rel="stylesheet" href="js/leaflet/leaflet.css"/>
+
+</head>
+<body>
+    <div id="mapid"></div>
+
+
+    <script src="js/leaflet/leaflet.js"></script>
+    <script type="text/javascript" src="js/styles.js"></script>
+
+    <script>
+
+    // Basemaps do mapbox. Lightmode ta desabilitado pra não ficar gastando clicks
+    var maptype = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+    var publicToken = '?access_token=pk.eyJ1IjoibHVjYXNjYW50b3MiLCJhIjoiY2pybDdnbzM0MDVsYzN5cGxxMXZhNmJpNSJ9.zeV5MaD9NvVOEqZAq4fjXg';
+
+    var lightmap = L.tileLayer(maptype + publicToken, backgroundMap);
+
+    var map = L.map('mapid', {
+        style: 'mapbox://styles/lucascantos/cjt7qafli103q1fmezu0xfful',
+        center: [47.5, -100.05],
+        zoom: 7,
+        minZoom: 2,
+        layers: lightmap
+    });
+
+
+    var states = [{
+    "type": "Feature",
+    "properties": {"party": "Republican"},
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+            [-104.05, 48.99],
+            [-97.22,  48.98],
+            [-96.58,  45.94],
+            [-104.03, 45.94],
+            [-104.05, 48.99]
+            ]]
+        }
+    }];
+
+    map.createPane("polygon");
+    map.createPane("image");
+
+    map.getPane('polygon').style.zIndex = 1;
+
+
+    var overlay = new L.ImageOverlay("http://chinalinktrading.com/blog/wp-content/uploads/2014/08/RADAR.png", [[45.94, -104.5],[48.99,-95.58]], {pane: "image"});
+    var geoJson = new L.geoJSON(states, {fillOpacity: 0.7});
+
+    map.addLayer(geoJson);
+    map.addLayer(overlay);
+    // L.imageOverlay("http://chinalinktrading.com/blog/wp-content/uploads/2014/08/RADAR.png",  [[45.94, -104.5],[48.99,-95.58]]).addTo(map);
+    // L.geoJSON(states, {fillOpacity: 0.7}).addTo(map);
+
+    </script>
+</body>
+</html>
