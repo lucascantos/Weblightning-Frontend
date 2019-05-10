@@ -125,19 +125,11 @@
     //grabApi(url, '/sp', sampaShp); Shapes das cidades de SP
 
 
-    grabApi(url, '/sp/whatever', struckShp);
-    ChangeRain();
-    grabApi(url, '/raios', lighningsMrk);
+    update();
 </script>
 
 <script>
     setInterval(function(){ update() }, 300000);
-    function update() {
-
-        grabApi(url, '/sp/whatever', struckShp);
-        ChangeRain()
-        grabApi(url, '/raios', lighningsMrk);
-    }
 </script>
 
 </body>

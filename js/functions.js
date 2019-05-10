@@ -19,11 +19,11 @@ function grabApi(url, minipath, layer) {
     }
 }
 function addMarker(data, layer) {
-    data.forEach(lightning => {
-        var y = lightning.latitude;
-        var x = lightning.longitude;
-        lightning = L.marker([y, x], marker15);
-        layer.addLayer(lightning).addTo(mymap);
+    data.forEach(singleLightning => {
+        var y = singleLightning.latitude;
+        var x = singleLightning.longitude;
+        singleLightning = L.marker([y, x], marker15);
+        layer.addLayer(singleLightning).addTo(mymap);
     });
 }
 
@@ -63,17 +63,28 @@ function grabRain(url, minipath, nivel=1) {
 function grabRedec(url, minipath) {
     var request = new XMLHttpRequest();
     request.open('GET', url + minipath);
+    request.send();
     request.onload = function () {
         var data = JSON.parse(this.response);
         if (request.status >= 200 && request.status < 400) {
-
+            atingidosList(data);
         }else{
             console.log('error');
         }
     }
 }
 
-function atingidosList{
+function atingidosList(data){
     var lista = document.getElementById('redecs');
+    data.forEach(redec =>{
+        lista.innerHTML = (redec['redec']);
+        //console.log(redec['municipios']);
+    });
+}
 
+function update() {
+    grabApi(url, '/sp/whatever', struckShp);
+    ChangeRain();
+    grabApi(url, '/raios', lighningsMrk);
+    grabRedec(url, '/sp/redecs');
 }
