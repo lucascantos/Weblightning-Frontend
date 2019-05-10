@@ -67,21 +67,40 @@ function grabRedec(url, minipath) {
     request.onload = function () {
         var data = JSON.parse(this.response);
         if (request.status >= 200 && request.status < 400) {
-            atingidosList(data);
+            atingidosList(data.sort(sortingJsonString('redec'))
+            );
         }else{
             console.log('error');
         }
     }
 }
 
-function atingidosList(data){
+function atingidosList(data){ // Precisa ser convertido em REACT. Solução temporaria com createElement
     var lista = document.getElementById('redecs');
     data.forEach(redec =>{
-        lista.innerHTML = (redec['redec']);
-        //console.log(redec['municipios']);
+       var newRedec = document.createElement('ul');
+        redec['municipios'].sort().forEach(municipio=>{
+            var newCity = document.createElement('li');
+            console.log(newCity);
+            newCity.innerHTML = (municipio);
+            newRedec.appendChild(newCity);
+        });
+        lista.appendChild(newRedec);
     });
 }
 
+function sortingJsonString(key){ // Função que ordena strings no Json
+    return function(obj1, obj2){
+        if (obj1[key]==obj2[key])
+            return 0
+        if (obj1[key]>obj2[key])
+            return 1
+        if (obj1[key]<obj2[key])
+            return -1
+    }
+}
+
+// Função de Atualização
 function update() {
     grabApi(url, '/sp/whatever', struckShp);
     ChangeRain();
