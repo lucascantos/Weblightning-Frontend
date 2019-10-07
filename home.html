@@ -18,7 +18,7 @@
     <nav class="col-2 menu">
         <ul class="nav m-3 flex-column">
             <li class="nav-item">
-                <button onclick="update()" class="btn btn-secondary">Update</button>
+                <button onclick="updateAll()" class="btn btn-secondary">Update</button>
             </li>
 
             <li class="nav-item">
@@ -48,6 +48,7 @@
 <script src="js/leaflet/leaflet.js"></script>
 <script type="text/javascript" src="js/styles.js"></script>
 <script type="text/javascript" src="js/functions.js"></script>
+<script type="text/javascript" src="js/constructor.js"></script>
 <script src="js/bootstrap.min.js"></script>
 
 
@@ -66,7 +67,7 @@
     if (debug == 'y') {
         var url = 'http://127.0.0.1:5000';
     } else {
-        var url = 'https://weblightning.herokuapp.com';
+        var url = 'https://pacific-reaches-50027.herokuapp.com/';
     }
 
     // Basemaps do mapbox. Lightmode ta desabilitado pra não ficar gastando clicks
@@ -97,8 +98,8 @@
 
 
     // Criando camadas de Shapes, Raios e Chuva.
-    //var brasilShp = L.geoJSON(null, {style: backgroundStates});
-    //var sampaShp = L.geoJSON(null, {style: backgroundPolys, onEachFeature: cityname});
+    var brasilShp = L.geoJSON(null, {style: backgroundStates});
+    var sampaShp = L.geoJSON(null, {style: backgroundPolys, onEachFeature: cityname});
 
     var lighningsMrk = L.layerGroup(null, {pane: "raios"});
     var rainImg = L.imageOverlay(null, {pane: "radares"});
@@ -106,12 +107,15 @@
 
 
     // Agrupamento de camadas. Fixa = RadioBtn, dinamica = checkbox
-    //var fixas = {
-    //    "Brasil": brasilShp,
-    //    "São Paulo": sampaShp,
-    //};
+    var fixas = {
+       "Brasil": brasilShp,
+       "São Paulo": sampaShp,
+    };
 
     var dinamica = {
+        
+        "Brasil": brasilShp,
+        "São Paulo": sampaShp,
         'Atingidos': struckShp,
         'Chuva': rainImg,
         'Raios': lighningsMrk,
@@ -120,15 +124,15 @@
 
 
     // Plot das camadas
-    //grabApi(url, '/brasil', brasilShp); Shape dos estdos do Brazil
-    //grabApi(url, '/sp', sampaShp); Shapes das cidades de SP
-
-
-    update();
+    // Shape dos estdos do Brazil
+    grabApi(url, '/shapes/brasil', brasilShp); 
+    // Shapes das cidades de SP
+    grabApi(url, '/shapes/sp', sampaShp);
+    updateAll();
 </script>
 
 <script>
-    setInterval(function(){ update() }, 300000);
+    setInterval(function(){ updateAll() }, 300000);
 </script>
 
 </body>
