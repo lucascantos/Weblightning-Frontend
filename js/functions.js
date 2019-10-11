@@ -81,7 +81,6 @@ function atingidosList(data){ // Precisa ser convertido em REACT. Solução temp
        var newRedec = document.createElement('ul');
         redec['municipios'].sort().forEach(municipio=>{
             var newCity = document.createElement('li');
-            console.log(newCity);
             newCity.innerHTML = (municipio);
             newRedec.appendChild(newCity);
         });
