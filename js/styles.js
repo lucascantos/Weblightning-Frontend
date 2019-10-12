@@ -48,7 +48,15 @@
     };
 
 function ChangeOpacity(value){
-    opc_value = parseInt(value)
-    rainImg.setStyle({opacity:value});
+    for (var i=0; i<=5;i++){
+        if (i<levelValue){            
+            out_value = 0;
+        }
+        else{
+            out_value = value;
+        }
+        rainImg.getLayers()[i].setOpacity(out_value);
+    }
+    
 }
 

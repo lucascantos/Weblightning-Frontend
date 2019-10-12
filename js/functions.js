@@ -28,19 +28,21 @@ function addLightnings(data, mapLayer) {
 
 // Precisa ser convertido em REACT. Solução temporaria com createElement
 function addStruck(data, mapLayer){ 
-    console.log(data)
-    
     struck = L.geoJSON(data, {style: highlightPolys, onEachFeature: cityname});
     mapLayer.addLayer(struck).addTo(mymap);
 }
 
 function addRain(data, mapLayer){
-    var radarImage = data['properties']['levels'][0]['image']
     var bbox = data['imagebox']
     var x = [[bbox.south, bbox.west], [bbox.north, bbox.east]];
 
-    rain = L.imageOverlay('data:image/png;base64,'+radarImage, x, {style: rainStyle});
-    mapLayer.addLayer(rain).addTo(mymap);
+    data['properties']['levels'].forEach(singleLevel => {
+        var radarImage = singleLevel['image'];  
+        rain = L.imageOverlay('data:image/png;base64,'+radarImage, x, rainStyle);
+        mapLayer.addLayer(rain).addTo(mymap);
+    });
+
+    
 }
 
 
