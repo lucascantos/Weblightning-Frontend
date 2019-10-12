@@ -11,7 +11,6 @@ function updateLightning(){
         "source": "starnet"
     };
     var path = url + '/points/raios?' + serialize(param);
-    console.log(path);
     grabApi(path, lighningsMrk, addLightnings);
 }
 

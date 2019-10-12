@@ -47,4 +47,8 @@
         interactive: false,
     };
 
+function ChangeOpacity(value){
+    opc_value = parseInt(value)
+    rainImg.setStyle({opacity:value});
+}
 

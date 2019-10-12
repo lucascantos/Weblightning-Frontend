@@ -27,10 +27,19 @@
                         <label for="customRange2" class="label" id="customLabel2">Radar</label>
                     </div>
                     <div class="col">
-                        <input id="customRange2" type="range" class="custom-range" min="1" max="5" value="1" onchange="ChangeRain()">
+                        <input id="customRange2" type="range" class="custom-range" min="1" max="5" value="1" >
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <label for="customRange1" class="label" id="customLabel1">Opacidade</label>
+                    </div>
+                    <div class="col">
+                        <input id="customRange1" type="range" class="custom-range" min="0" max="1" step="0.05" value="1" >
                     </div>
                 </div>
             </li>
+            
             <li id = "redecs" class="nav-item">
                 <ul class="nav">
                     <li class="nav-item">
@@ -55,9 +64,15 @@
 <script>
     var radar_values = {0:'#333', 1:'#07A', 2:'#070', 3:'#AA0', 4:'#A00', 5:'#909'}
     var slider_value = document.getElementById('customRange2')
-    var slider_label = document.getElementById('customLabel2')
     slider_value.oninput = function () {
         slider_value .style.background = radar_values[this.value];
+    }
+</script>
+
+<script>
+    var opacity_value = document.getElementById('customRange1')
+    opacity_value.oninput = function () {
+        ChangeOpacity(this.value)
     }
 </script>
 
@@ -97,41 +112,40 @@
     mymap.getPane("highlights").style.zIndex = 300;
 
 
+    var lighningsMrk = L.featureGroup(null, {pane: "raios"});
+    var rainImg = L.featureGroup(null, {pane: "radares"});
+    var struckShp = L.featureGroup(null, {pane: "highlights"});
+
+
     // Criando camadas de Shapes, Raios e Chuva.
-    var brasilShp = L.geoJSON(null, {style: backgroundStates});
-    var sampaShp = L.geoJSON(null, {style: backgroundPolys, onEachFeature: cityname});
-
-    var lighningsMrk = L.layerGroup(null, {pane: "raios"});
-    var rainImg = L.imageOverlay(null, {pane: "radares"});
-    var struckShp = L.geoJSON(null, {style: highlightPolys, onEachFeature: cityname, pane: "highlights"});
-
+    // var brasilShp = L.geoJSON(null, {style: backgroundStates});
+    // var sampaShp = L.geoJSON(null, {style: backgroundPolys, onEachFeature: cityname});
 
     // Agrupamento de camadas. Fixa = RadioBtn, dinamica = checkbox
-    var fixas = {
-       "Brasil": brasilShp,
-       "São Paulo": sampaShp,
-    };
+    // var fixas = {
+    //    "Brasil": brasilShp,
+    //    "São Paulo": sampaShp,
+    // };
+    
+    // Plot das camadas
+    // Shape dos estdos do Brazil
+    // grabApi(url, '/shapes/brasil', brasilShp); 
+    // Shapes das cidades de SP
+    // grabApi(url, '/shapes/sp', sampaShp);
 
     var dinamica = {
         
-        "Brasil": brasilShp,
-        "São Paulo": sampaShp,
         'Atingidos': struckShp,
         'Chuva': rainImg,
         'Raios': lighningsMrk,
     };
     var control = L.control.layers(baseMapIndex, dinamica).addTo(mymap);
 
-
-    // Plot das camadas
-    // Shape dos estdos do Brazil
-    grabApi(url, '/shapes/brasil', brasilShp); 
-    // Shapes das cidades de SP
-    grabApi(url, '/shapes/sp', sampaShp);
     updateAll();
 </script>
 
 <script>
+    struckShp.updateAll
     setInterval(function(){ updateAll() }, 300000);
 </script>
 
