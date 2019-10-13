@@ -25,8 +25,8 @@
     // Regiões destacadas atingidas
     var highlightPolys = {
         color: '#800',
-        fillOpacity: 0.5,
-        weight: 0.5,
+        fillOpacity: 0.2,
+        weight: 0.2,
     };
 
     // Radares meteorologicos
@@ -51,12 +51,21 @@ function ChangeOpacity(value){
     for (var i=0; i<=5;i++){
         if (i<levelValue){            
             out_value = 0;
+            weight = 0
+            fillOpacity = 0
         }
         else{
+            weight = 0.2
             out_value = value;
         }
-        rainImg.getLayers()[i].setOpacity(out_value);
-    }
-    
+        rainImg.getLayers()[i].setOpacity(out_value);        
+        console.log(rainStruckShp.getLayers())
+        rainStruckShp.getLayers()[i].setStyle({'fillOpacity': weight, 'weight': weight});
+    }    
 }
-
+    
+function StyleUpdate(value){
+    radar_level.style.background = lavel_values[value];
+    levelValue = value;
+    ChangeOpacity(radar_opacity.value)
+}

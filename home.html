@@ -67,18 +67,14 @@
     var radar_opacity = document.getElementById('customRange1');
 
     var levelValue = radar_level.value;
-    
-
     radar_level.oninput = function () {
-        radar_level.style.background = lavel_values[this.value];
-        levelValue = this.value;
-        ChangeOpacity(radar_opacity.value)
+        StyleUpdate(this.value)
     }    
 
     radar_opacity.oninput = function () {
         ChangeOpacity(this.value)
-        // console.log(rainImg.getLayers()[0])
     }
+    
 </script>
 
 
@@ -115,12 +111,13 @@
 
     // Criada um pane pra mover o Shape pra o mais baixo possivel
     mymap.createPane("highlights");
-    mymap.getPane("highlights").style.zIndex = 300;
+    mymap.getPane("highlights").style.zIndex = 100;
 
 
     var lighningsMrk = L.featureGroup(null, {pane: "raios"});
     var rainImg = L.featureGroup(null, {pane: "radares"});
-    var struckShp = L.featureGroup(null, {pane: "highlights"});
+    var lighningStruckShp = L.featureGroup(null, {pane: "highlights"});
+    var rainStruckShp = L.featureGroup(null, {pane: "highlights"});
 
 
     // Criando camadas de Shapes, Raios e Chuva.
@@ -141,7 +138,7 @@
 
     var dinamica = {
         
-        'Atingidos': struckShp,
+        'Atingidos': rainStruckShp,
         'Chuva': rainImg,
         'Raios': lighningsMrk,
     };
@@ -151,7 +148,6 @@
 </script>
 
 <script>
-    struckShp.updateAll
     setInterval(function(){ updateAll() }, 300000);
 </script>
 

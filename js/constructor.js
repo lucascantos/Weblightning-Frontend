@@ -10,17 +10,17 @@ function updateLightning(){
     var param = {
         "source": "starnet"
     };
-    var path = url + '/points/raios?' + serialize(param);
-    grabApi(path, lighningsMrk, addLightnings);
+    var path = url + '/raios?' + serialize(param);
+    grabApi(path, lighningsMrk, addMrks);
 }
 
-function updateStruck(){
+function updateLightningStruck(){
     var param = {
         "source": "starnet",
         "struck": "hit"
     };
-    var path = url + '/shapes/sp?' + serialize(param);
-    grabApi(path, struckShp, addStruck);
+    var path = url + '/raios/struck?' + serialize(param);
+    grabApi(path, lighningStruckShp, addShp);
 }
 
 function updateRain(){
@@ -28,13 +28,23 @@ function updateRain(){
         "source": "redemet",
         "location": "sr"
     };
-    var path = url + '/radar?' + serialize(param);
-    grabApi(path, rainImg, addRain);
+    var path = url + '/chuva?' + serialize(param);
+    grabApi(path, rainImg, addImg);
+}
+
+function updateRainStruck(){
+    var param = {
+        "source": "redemet",
+        "location": "sr"
+    };
+    var path = url + '/chuva/struck?' + serialize(param);
+    grabApi(path, rainStruckShp, MultipleShp);
 }
 
 
 function updateAll() {
     updateLightning()
-    updateStruck()
+    // updateLightningStruck()
     updateRain()
+    // updateRainStruck()
 }

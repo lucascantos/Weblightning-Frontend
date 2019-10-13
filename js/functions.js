@@ -8,14 +8,15 @@ function grabApi(url, mapLayer, func) {
         if (request.status >= 200 && request.status < 400) {            
             
             mapLayer.clearLayers();
-            func(data, mapLayer);
+            func(data, mapLayer);            
+
         } else {
             console.log('error');
         }
     }
 }
 
-function addLightnings(data, mapLayer) {
+function addMrks(data, mapLayer) {
     
     data['lightnings'].forEach(singleLightning => {
         var y = singleLightning.latitude;
@@ -27,12 +28,21 @@ function addLightnings(data, mapLayer) {
 }
 
 // Precisa ser convertido em REACT. Solução temporaria com createElement
-function addStruck(data, mapLayer){ 
+function addShp(data, mapLayer){ 
     struck = L.geoJSON(data, {style: highlightPolys, onEachFeature: cityname});
     mapLayer.addLayer(struck).addTo(mymap);
 }
+function MultipleShp(data, mapLayer){ 
+    data['levels'].forEach(singleLevel => {
+        geojson = JSON.parse(singleLevel['cities'])
+        struck = L.geoJSON(geojson, {style: highlightPolys});
+        mapLayer.addLayer(struck).addTo(mymap);
+    });
+    
+    StyleUpdate(radar_level.value);
+}
 
-function addRain(data, mapLayer){
+function addImg(data, mapLayer){
     var bbox = data['imagebox']
     var x = [[bbox.south, bbox.west], [bbox.north, bbox.east]];
 
@@ -40,8 +50,10 @@ function addRain(data, mapLayer){
         var radarImage = singleLevel['image'];  
         rain = L.imageOverlay('data:image/png;base64,'+radarImage, x, rainStyle);
         mapLayer.addLayer(rain).addTo(mymap);
+        
     });
-
+    
+    StyleUpdate(radar_level.value);
     
 }
 
