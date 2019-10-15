@@ -8,7 +8,7 @@ function grabApi(url, mapLayer, func) {
         if (request.status >= 200 && request.status < 400) {            
             
             mapLayer.clearLayers();
-            func(data, mapLayer);            
+            func(data, mapLayer);                
 
         } else {
             console.log('error');
@@ -23,7 +23,6 @@ function addMrks(data, mapLayer) {
         var x = singleLightning.longitude;        
         singleLightning = L.marker([y, x], marker15);
         mapLayer.addLayer(singleLightning).addTo(mymap);
-
     });
 }
 
@@ -34,12 +33,11 @@ function addShp(data, mapLayer){
 }
 function MultipleShp(data, mapLayer){ 
     data['levels'].forEach(singleLevel => {
-        geojson = JSON.parse(singleLevel['cities'])
-        struck = L.geoJSON(geojson, {style: highlightPolys});
-        mapLayer.addLayer(struck).addTo(mymap);
-    });
-    
-    StyleUpdate(radar_level.value);
+        geojson = singleLevel['cities']
+        struck = L.geoJSON(JSON.parse(geojson), {style: highlightPolys, onEachFeature: cityname});
+        mapLayer.addLayer(struck).addTo(mymap);        
+        StyleUpdate(radar_level.value);  
+    });   
 }
 
 function addImg(data, mapLayer){
@@ -50,11 +48,9 @@ function addImg(data, mapLayer){
         var radarImage = singleLevel['image'];  
         rain = L.imageOverlay('data:image/png;base64,'+radarImage, x, rainStyle);
         mapLayer.addLayer(rain).addTo(mymap);
-        
-    });
-    
-    StyleUpdate(radar_level.value);
-    
+    });     
+            
+    StyleUpdate(radar_level.value);  
 }
 
 

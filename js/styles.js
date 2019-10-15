@@ -34,7 +34,6 @@
         opacity: 0.5,
     };
 
-
     // Icones de raio
     var myicon = L.icon({
         iconUrl: 'img/Licon.png',
@@ -52,15 +51,17 @@ function ChangeOpacity(value){
         if (i<levelValue){            
             out_value = 0;
             weight = 0
-            fillOpacity = 0
         }
         else{
-            weight = 0.2
             out_value = value;
+            weight = 0.2
         }
-        rainImg.getLayers()[i].setOpacity(out_value);        
-        console.log(rainStruckShp.getLayers())
-        rainStruckShp.getLayers()[i].setStyle({'fillOpacity': weight, 'weight': weight});
+        if (rainImg.getLayers()[i] != null){
+            rainImg.getLayers()[i].setOpacity(out_value);
+        }
+        if (rainStruckShp.getLayers()[i] != null){
+            rainStruckShp.getLayers()[i].setStyle({'fillOpacity': weight, 'weight': weight, 'color': lavel_values[i]});
+        }
     }    
 }
     

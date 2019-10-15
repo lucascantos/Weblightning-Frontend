@@ -17,7 +17,6 @@ function updateLightning(){
 function updateLightningStruck(){
     var param = {
         "source": "starnet",
-        "struck": "hit"
     };
     var path = url + '/raios/struck?' + serialize(param);
     grabApi(path, lighningStruckShp, addShp);
@@ -43,8 +42,8 @@ function updateRainStruck(){
 
 
 function updateAll() {
+    updateLightningStruck()
+    updateRainStruck()
     updateLightning()
-    // updateLightningStruck()
-    updateRain()
-    // updateRainStruck()
+    updateRain()    
 }
